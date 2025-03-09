@@ -1,35 +1,93 @@
 @import './base.css';
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+/* 图标字体基础样式 */
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+/* 基础按钮样式 */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  user-select: none;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+/* 常用样式类 */
+.text-primary {
+  color: var(--primary-color);
+}
+
+.text-error {
+  color: var(--error-color);
+}
+
+.text-success {
+  color: var(--success-color);
+}
+
+.text-warning {
+  color: var(--warning-color);
+}
+
+.text-info {
+  color: var(--info-color);
+}
+
+.bg-light {
+  background-color: var(--background-color-light);
+}
+
+.shadow {
+  box-shadow: var(--shadow-md);
+}
+
+.rounded {
+  border-radius: var(--border-radius-md);
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 过渡效果类 */
+.transition {
+  transition: all var(--transition-normal);
+}
+
+.transition-fast {
+  transition: all var(--transition-fast);
+}
+
+.transition-slow {
+  transition: all var(--transition-slow);
+}
+
+/* 动画类 */
+.animate-fade-in {
+  animation: fadeIn var(--transition-normal);
+}
+
+.animate-slide-in {
+  animation: slideInRight var(--transition-normal);
+}
+
+.animate-slide-out {
+  animation: slideOutRight var(--transition-normal);
+}
+
+/* 响应式工具类 */
+@media (max-width: 768px) {
+  .mobile-hidden {
+    display: none !important;
   }
-}
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+  .mobile-full-width {
+    width: 100% !important;
   }
 }

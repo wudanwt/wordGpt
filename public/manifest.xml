@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<manifest xmlns="http://schemas.wps.cn/oem/manifest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.wps.cn/oem/manifest manifest.xsd">
+    <addon-info>
+        <name>AI助手</name>
+        <version>1.0.0</version>
+        <company>WPS AI</company>
+        <description>WPS智能写作助手</description>
+        <help-url>https://ai.wps.cn</help-url>
+    </addon-info>
+
+    <!-- 支持多平台 -->
+    <platform>
+        <app-version min="11.8.2.11378">wps</app-version>
+        <!-- Windows和macOS都支持 -->
+        <os name="windows" version="10.0.0"/>
+        <os name="mac" version="10.12.0"/>
+    </platform>
+
+    <dependencies>
+        <dependency name="TypeScript" version="4.0"/>
+        <dependency name="JavaScript" version="ES6"/>
+    </dependencies>
+
+    <entry-points>
+        <entry-point>
+            <name>wordGpt</name>
+            <type>ribbon</type>
+            <path>ribbon.xml</path>
+        </entry-point>
+    </entry-points>
+
+    <permissions>
+        <permission name="ReadDocument" description="读取当前文档内容"/>
+        <permission name="WriteDocument" description="写入当前文档内容"/>
+        <permission name="ShowTaskPane" description="显示任务窗格"/>
+        <permission name="ReadWriteClipboard" description="读写剪贴板"/>
+        <permission name="Internet" description="访问网络"/>
+    </permissions>
+
+    <features>
+        <feature name="custom-ribbon"/>
+        <feature name="task-pane"/>
+        <feature name="dialog"/>
+    </features>
+
+    <!-- 离线运行相关设置 -->
+    <offline-files>
+        <!-- 基础文件 -->
+        <file path="ribbon.xml"/>
+        <file path="index.html"/>
+        <!-- 静态资源 -->
+        <file path="assets/*"/>
+        <file path="images/*"/>
+        <!-- 字体和样式 -->
+        <file path="*.css"/>
+        <file path="*.woff"/>
+        <file path="*.woff2"/>
+        <!-- 图标 -->
+        <file path="favicon.ico"/>
+    </offline-files>
+</manifest>

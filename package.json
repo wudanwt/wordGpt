@@ -1,30 +1,39 @@
 {
-	"name": "wordGpt",
-	"addonType": "wps",
-	"version": "1.0.0",
-	"private": true,
-	"type": "module",
-	"scripts": {
-		"dev": "vite",
-		"build": "vite build",
-		"preview": "vite preview",
-		"lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-		"format": "prettier --write src/"
-	},
-	"dependencies": {
-		"axios": "^1.7.2",
-		"core-js": "^3.37.1",
-		"vue": "^3.4.29",
-		"vue-router": "^4.3.3"
-	},
-	"devDependencies": {
-		"@rushstack/eslint-patch": "^1.8.0",
-		"@vitejs/plugin-vue": "^5.0.5",
-		"@vue/eslint-config-prettier": "^9.0.0",
-		"eslint": "^8.57.0",
-		"eslint-plugin-vue": "^9.23.0",
-		"prettier": "^3.2.5",
-		"vite": "^5.3.1",
-		"wps-jsapi-declare": "latest"
-	}
+  "name": "word-gpt",
+  "addonType": "wps",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3889",
+    "build": "vite build",
+    "build:plugin": "node scripts/build.js",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "format": "prettier --write src/",
+    "clean": "rimraf dist plugin-dist node_modules"
+  },
+  "dependencies": {
+    "7zip-bin": "^5.2.0",
+    "axios": "^1.7.2",
+    "core-js": "^3.37.1",
+    "marked": "^15.0.7",
+    "node-7z": "^3.0.0",
+    "vue": "^3.4.29",
+    "vue-router": "^4.3.3"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.8.0",
+    "@vitejs/plugin-vue": "^5.0.5",
+    "@vue/eslint-config-prettier": "^9.0.0",
+    "archiver": "^6.0.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.23.0",
+    "fs-extra": "^11.2.0",
+    "prettier": "^3.2.5",
+    "rimraf": "^5.0.5",
+    "terser": "^5.29.1",
+    "vite": "^5.3.1",
+    "wps-jsapi-declare": "latest"
+  }
 }

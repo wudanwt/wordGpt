@@ -1,23 +1,19 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-//import HomeView from '../views/HomeView.vue'
+import Root from '../components/Root.vue'
+import AIChatPane from '../components/AIChatPane.vue'
 
 const router = createRouter({
-  history:  createWebHashHistory(''),
+  history: createWebHashHistory(),
   routes: [
     {
       path: '/',
-      name: '默认页',
-      component: () => import('../components/Root.vue')
+      name: 'root',
+      component: Root
     },
     {
-      path: '/dialog',
-      name: '对话框',
-      component: () => import('../components/Dialog.vue')
-    },
-    {
-      path: '/taskpane',
-      name: '任务窗格',
-      component: () => import('../components/TaskPane.vue')
+      path: '/ai-assistant',
+      name: 'ai-assistant',
+      component: AIChatPane
     }
   ]
 })

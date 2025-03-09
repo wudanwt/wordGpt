@@ -1,13 +1,199 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
   <head>
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite App</title>
+    <title>WPS AI助手</title>
+    <script>
+      // 全局状态管理
+      window.__DEV__ = window.location.hostname === 'localhost' || 
+                      window.location.hostname === '127.0.0.1';
+      window.__WPS_READY__ = false;
+      
+      // WPS 枚举值
+      window.JSKsoEnum_msoCTPDockPositionTop = 0;
+      window.JSKsoEnum_msoCTPDockPositionBottom = 1;
+      window.JSKsoEnum_msoCTPDockPositionRight = 2;
+      window.JSKsoEnum_msoCTPDockPositionLeft = 3;
+      
+      // 开发环境模拟
+      if (window.__DEV__) {
+        console.log('Running in development mode');
+        window.Application = window.Application || {
+          ActiveDocument: {
+            Name: 'test.docx',
+            Content: { Text: 'This is a test document.' },
+            ActiveWindow: {
+              Selection: {
+                Text: '',
+                Start: 0,
+                End: 0,
+                InsertAfter: function(text) {
+                  console.log('插入文本:', text);
+                  this.Text = text;
+                },
+                Delete: function() {
+                  console.log('删除选中文本');
+                  this.Text = '';
+                }
+              }
+            },
+            Activate: function() {
+              console.log('激活文档');
+            }
+          },
+          Alert: function(msg) {
+            console.log('[WPS Alert]', msg);
+          },
+          CreateTaskPane: function(url) {
+            console.log('Creating TaskPane:', url);
+            return {
+              _visible: false,
+              _dockPosition: 2, // 默认右侧 (2 = JSKsoEnum_msoCTPDockPositionRight)
+              _width: 400,
+              get Visible() {
+                return this._visible;
+              },
+              set Visible(value) {
+                this._visible = value;
+                console.log('TaskPane visibility changed:', value);
+              },
+              get DockPosition() {
+                return this._dockPosition;
+              },
+              set DockPosition(value) {
+                this._dockPosition = value;
+                console.log('TaskPane dock position changed:', value);
+              },
+              get Width() {
+                return this._width;
+              },
+              set Width(value) {
+                this._width = value;
+                console.log('TaskPane width changed:', value);
+              }
+            };
+          },
+          Enum: {
+            JSKsoEnum_msoCTPDockPositionTop: 0,
+            JSKsoEnum_msoCTPDockPositionBottom: 1,
+            JSKsoEnum_msoCTPDockPositionRight: 2,
+            JSKsoEnum_msoCTPDockPositionLeft: 3
+          }
+        };
+        window.__WPS_READY__ = true;
+      }
+
+      // 错误处理和调试增强
+      window.onerror = function(msg, url, line, col, error) {
+        const errorInfo = {
+          message: msg,
+          source: url,
+          line: line,
+          column: col,
+          error: error?.stack || error,
+          time: new Date().toISOString()
+        };
+        
+        console.error('Global Error:', errorInfo);
+
+        // 在开发环境下保存错误记录
+        if (window.__DEV__) {
+          if (!window.__ERROR_LOG__) {
+            window.__ERROR_LOG__ = [];
+          }
+          window.__ERROR_LOG__.push(errorInfo);
+        }
+
+        return false;
+      };
+
+      // 未处理的Promise错误
+      window.onunhandledrejection = function(event) {
+        console.error('Unhandled Promise Rejection:', event.reason);
+        if (window.__DEV__) {
+          if (!window.__ERROR_LOG__) {
+            window.__ERROR_LOG__ = [];
+          }
+          window.__ERROR_LOG__.push({
+            type: 'unhandled_promise',
+            error: event.reason,
+            time: new Date().toISOString()
+          });
+        }
+      };
+
+      // 初始化状态
+      window.initState = function() {
+        // 检查必要的全局对象
+        if (!window.ribbon) {
+          console.warn('Ribbon object not initialized');
+        }
+        if (!window._aiPaneVisible) {
+          window._aiPaneVisible = false;
+        }
+        
+        // 开发环境下的额外功能
+        if (window.__DEV__) {
+          window.__DEBUG__ = {
+            getState: function() {
+              return {
+                wpsReady: window.__WPS_READY__,
+                hasRibbon: !!window.ribbon,
+                hasApplication: !!window.Application,
+                hasEnum: !!(window.Application?.Enum),
+                paneVisible: window._aiPaneVisible,
+                errors: window.__ERROR_LOG__ || []
+              };
+            },
+            clearErrors: function() {
+              window.__ERROR_LOG__ = [];
+              console.log('Error log cleared');
+            },
+            getEnumValues: function() {
+              return {
+                top: window.JSKsoEnum_msoCTPDockPositionTop,
+                bottom: window.JSKsoEnum_msoCTPDockPositionBottom,
+                right: window.JSKsoEnum_msoCTPDockPositionRight,
+                left: window.JSKsoEnum_msoCTPDockPositionLeft
+              };
+            }
+          };
+
+          // 打印初始状态
+          console.log('Initial state:', window.__DEBUG__.getState());
+        }
+      };
+
+      // DOM加载完成后初始化
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM ready, initializing...');
+        window.initState();
+      });
+
+      // 控制台欢迎信息
+      if (window.__DEV__) {
+        console.log('%cWPS AI Assistant Dev Tools', 'font-size: 20px; font-weight: bold; color: #2563eb;');
+        console.log('Available debug commands:');
+        console.log('window.__DEBUG__.getState()   - Get current state');
+        console.log('window.__DEBUG__.clearErrors() - Clear error log');
+        console.log('window.__DEBUG__.getEnumValues() - Get TaskPane position enums');
+        console.log('window._ribbonDebug          - Ribbon debugging tools');
+        console.log('window._wpsDebug             - WPS API debugging tools');
+        console.log('window._aiDebug              - AI service debugging tools');
+      }
+    </script>
+    
+    <!-- WPS SDK -->
+    <script 
+      src="https://js.wps.cn/sdk/w.js" 
+      onerror="console.error('WPS SDK加载失败，使用开发环境')"
+      onload="window.__WPS_READY__ = true; console.log('WPS SDK加载成功');">
+    </script>
   </head>
   <body>
     <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="./src/main.js"></script>
   </body>
 </html>
