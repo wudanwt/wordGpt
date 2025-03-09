@@ -8,7 +8,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'root',
-      component: Root
+      component: AIChatPane
     },
     {
       path: '/ai-assistant',
